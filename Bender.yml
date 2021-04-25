@@ -9,6 +9,11 @@ sources:
     - src/dm_mem.sv
     - src/dm_top.sv
     - src/dmi_cdc.sv
-    - src/dmi_jtag.sv
+  - target: not(all(xilinx, bscane))
+    files:
+    - src/dmi_jtag_tap.sv
+  - target: all(xilinx, bscane)
+    files:
+    - src/dmi_bscane_tap.sv
     - src/dmi_jtag_tap.sv
     - src/dm_sba.sv
