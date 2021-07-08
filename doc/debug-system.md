@@ -456,7 +456,7 @@ Address         | Description
 ## JTAG Debug Transport Module
 
 The RISC-V specification does not mandate a specific transport mode for the
-debug module. While theoratially debug could be facilitate over any
+debug module. While debugging could theoretically be facilitated over any
 memory-mapped protocol the debug specification standardizes the access via a
 IEEE 1149.1 JTAG TAP (Test Access Port) - see [debug spec 0.13 chapter
 6](https://riscv.org/wp-content/uploads/2019/03/riscv-debug-release.pdf).
@@ -519,24 +519,27 @@ riscv set_ir dtmcs 0x22
 riscv set_ir dmi 0x23
 ```
 
-To find a suitable (or similar) configuration for your adapter you can have a look at OpenOCD's [interface](https://github.com/ntfreak/openocd/tree/master/tcl/interface) configuration snippets.
-
 #### FPGA IR Lengths
 
-The IR length is different between FPGA families. Here is a non exhaustive list should be up-to-date (April 2021):
+The IR length is different between FPGA families. Below is a non exhaustive list should be up-to-date (July 2021).
+The data can be extracted from the BSDL models.
 
 
 | Device                                                                                                                                                            | IR Length | `IDCODE`   | `DTMCS`    | `DMI`      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- | ---------- | ---------- |
-| `xcku3p`, `xcku9p`, `xcku11p`, `xcku13eg`, `xcku15p`, `xcku5p`, `xcvu3p`, `ku025`, `ku035`, `ku040`, `ku060`, `ku095`, `vu065`, `vu080`, `vu095`                  | 6         | `0x9`      | `0x22`     | `0x23`     |
+| `xcku3p`, `xcku9p`, `xcku11p`, `xcku13eg`, `xcku15p`, `xcku19p`, `xcku5p`, `xcvu3p`, `ku025`, `ku035`, `ku040`, `ku060`, `ku095`, `vu065`, `vu080`, `vu095`       | 6         | `0x9`      | `0x22`     | `0x23`     |
 | `7a15t`, `7a25t`, `7s15`, `7s100, `, `7a35t`, `7a50t`, `7a75t`, `7a100t`, `7a200t`, `7k70t`, `7k160t`, `7k325t`, `7k355t`, `7k410t`, `7k420t`, `7k480t`, `7v585t` | 6         | `0x9`      | `0x22`     | `0x23`     |
 | `7vx330t`, `7vx415t`, `7vx485t`, `7vx550t`, `7vx690t`, `7vx980t`, `7z010`, `7z015`, `7z020`, `7z030`, `7z035`, `7z045`, `7z007s`, `7z012s`, `7z014s`, `7z100`     | 6         | `0x9`      | `0x22`     | `0x23`     |
-| `xczu9eg`, `xcvu5p`, `xcvu7p`, `ku085`, `ku115`, `vu125`                                                                                                          | 12        | `0x249`    | `0x8a4`    | `0x8e4`    |
-| `xczu3eg`, `xczu4eg`, `xczu5eg`, `xczu7eg`, `xczu2cg`, `xczu3cg`, `xczu4cg`, `xczu5cg`, `xczu6cg`, `xczu7cg`, `xczu9cg`, `xczu5ev`, `xczu11eg`                    | 16        | `0x2492`   | `0x8a49`   | `0x8e49`   |
-| `xczu15eg`, `xczu19eg`, `xczu7ev`, `xczu2eg`, `xczu4ev`, `xczu6eg`, `xczu17eg`                                                                                    | 16        | `0x2492`   | `0x8a49`   | `0x8e49`   |
+| `xcvu23p`, `xcvu31p`, `xcvu33p`                                                                                                                                   | 6         | `0x9`      | `0x22`     | `0x23`     |
+| `vu125`                                                                                                                                                           | 12        | `???`      | `???`      | `???`      |
+| `xcvu7p`, `xcvu5p`, `xcvu35p`, `xcvu45p`, `ku085`, `ku115`                                                                                                        | 12        | `0x249`    | `0x8a4`    | `0x8e4`    |
+| `xczu2cg`, `xczu2eg`, `xczu3cg`, `xczu3eg`, `xczu4cg`, `xczu4eg`, `xczu4ev`, `xczu5cg`, `xczu5eg`, `xczu5ev`, `xczu6cg`, `xczu6eg`                                | 12        | `0x249`    | `0x922`    | `0x923`    |
+| `xczu7cg`, `xczu7eg`, `xczu7ev`, `xczu9eg`, `xczu9cg`, `xczu11eg`, `xczu15eg`, `xczu17eg`, `xczu19eg`                                                             | 12        | `0x249`    | `0x922`    | `0x923`    |
+| `xcvu11p`,                                                                                                                                                        | 18        | `0x9249`   | `0x248A4`  | `0x248E4`  |
+| `xcvu9p`, `xcvu37p`, `xcvu47p`, `xcvu57p`, `vu160`, `vu190`, `vu440`                                                                                              | 18        | `0x9249`   | `0x22924`  | `0x23924`  |
 | `7vh580t`                                                                                                                                                         | 22        | `0x92492`  | `0x229249` | `0x239249` |
-| `xcvu13p`, `7v2000t`, `7vx1140t`, `xcvu9p`, `xcvu11p`, `vu160`, `vu190`, `vu440`                                                                                  | 24        | `0x249249` | `0x8a4924` | `0x8e4924` |
-| `7vh870t`                                                                                                                                                         | 38        | ?          | ?          | ?          |
+| `xcvu13p`, `xcvu19p`, `xcvu27p`, `xcvu29p`, `7v2000t`, `7vx1140t`                                                                                                 | 24        | `0x249249` | `0x8a4924` | `0x8e4924` |
+| `7vh870t`                                                                                                                                                         | 38        | `???`      | `???`      | `???`      |
 
 #### FPGA `IDCODES`
 
@@ -586,6 +589,19 @@ The four MSBs additional encodes the version of the FPGA. So for `7a15t` version
 | `ku040`    | `32'h03822093` |     | `xcvu9p`   | `32'h04B31093` |
 | `ku060`    | `32'h03919093` |     | `xcvu11p`  | `32'h04B42093` |
 | `ku085`    | `32'h0390F093` |     | `xcvu13p`  | `32'h04B51093` |
+                                    | `xcvu19p`  | `32'h04BA1093` |
+                                    | `xcvu23p`  | `32'h04ACE093` |
+                                    | `xcvu27p`  | `32'h04B43093` |
+                                    | `xcvu29p`  | `32'h04B41093` |
+                                    | `xcvu31p`  | `32'h04B6B093` |
+                                    | `xcvu33p`  | `32'h04B69093` |
+                                    | `xcvu35p`  | `32'h04B71093` |
+                                    | `xcvu37p`  | `32'h04B79093` |
+                                    | `xcvu45p`  | `32'h04B73093` |
+                                    | `xcvu47p`  | `32'h04B7B093` |
+                                    | `xcvu57p`  | `32'h04B61093` |
+                                    | `xcku19p`  | `32'h04ACF093` |
+
 
 #### Example OpenOCD Configuration
 
@@ -622,3 +638,5 @@ riscv set_ir dmi 0x23
 
 adapter_khz     1000
 ```
+
+To find a suitable (or similar) configuration for your adapter you can have a look at OpenOCD's [interface](https://github.com/ntfreak/openocd/tree/master/tcl/interface) configuration snippets.
